@@ -1,0 +1,36 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    spockVersion = '1.0-groovy-2.3'
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+    compile("org.codehaus.groovy:groovy-all:2.3.11")
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.spockframework:spock-spring:${spockVersion}")
+    testCompile("org.spockframework:spock-core:${spockVersion}")
+
+    compile("cglib:cglib-nodep:3.1")
+}

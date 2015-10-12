@@ -1,24 +1,27 @@
 package com.pmw.rps
 
-import com.pmw.rps.config.RPSConfig
 import com.pmw.rps.domain.RPSMove
 import com.pmw.rps.domain.RPSResult
+import com.pmw.rps.service.RockPaperScissorsGameService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.SpringApplicationConfiguration
+import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.test.context.ContextConfiguration
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created by Paul on 10/11/2015.
  */
-@SpringApplicationConfiguration(classes = RockPapersScissorsApplication.class)
+@ContextConfiguration(loader=SpringApplicationContextLoader.class, classes=RockPapersScissorsApplication.class)
 class RockPaperScissorsTest extends Specification {
 
     @Autowired
-    RockPaperScissors rockPaperScissors
+    RockPaperScissorsGameService service
 
-    def "test happy path for RPS"() {
+    @Unroll
+    def "test happy path for RPS: expecting result of #expectedResult where player1 performs #player1Move and player2 performs #player2Move"() {
         when:
-        RPSResult actualResult = rockPaperScissors.playGame(player1Move, player2Move)
+        RPSResult actualResult = service.resolveMatch(player1Move, player2Move)
 
         then:
         notThrown(Exception)
