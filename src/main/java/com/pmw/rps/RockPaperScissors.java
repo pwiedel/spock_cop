@@ -7,7 +7,6 @@ import com.pmw.rps.service.RockPaperScissorsGameService;
 import com.pmw.rps.service.RockPaperScissorsPlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 /**
  * Created by Paul on 10/11/2015.
@@ -15,19 +14,27 @@ import org.springframework.stereotype.Service;
 @Component
 public class RockPaperScissors {
     @Autowired
-    private RockPaperScissorsGameService rpsService;
+    private RockPaperScissorsGameService gameService;
 
     @Autowired
-    private RockPaperScissorsPlayerService rpspService;
+    private RockPaperScissorsPlayerService playerService;
 
     public RPSResult playGame(PlayerMove player1Move, PlayerMove player2Move) {
         RPSResult result = null;
+        if(player1Move == null || player1Move.getMove() == null
+                || player1Move.getPlayer() == null
+                || player2Move == null || player2Move.getMove() == null
+                || player2Move.getPlayer() == null) {
+            throw new IllegalArgumentException();
+        }
+
         try {
-            result = rpsService.resolveMatch(player1Move.getMove(), player2Move.getMove());
+            result = gameService.resolveMatch(player1Move.getMove(), player2Move.getMove());
         } catch (IllegalRPSMoveException e) {
             e.printStackTrace();
+            result = RPSResult.DISQUALIFY;
         }
-        rpspService.postResults(player1Move, player2Move, result);
+        playerService.postResults(player1Move, player2Move, result);
 
         return result;
     }
